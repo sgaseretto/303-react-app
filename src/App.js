@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import RoutedNewsFeed from './components/NewsFeed';
+import glamorous from 'glamorous';
+import NewsFeed from './components/NewsFeed';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 class ErrorBoundary extends React.Component {
@@ -39,6 +40,32 @@ class ErrorBoundary extends React.Component {
 }
 
 
+class ErrorDisplay extends Component {
+  state = {
+      error: false
+  }
+  componentDidCatch(error, errorInfo) {
+      this.setState({ error });
+  }
+  render() {
+      if (this.state.error) {
+          return <p>Something went wrong.</p>
+      }
+      return this.props.children
+  }
+}
+
+const StyledContainer = glamorous.div({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  alignContent: "center",
+  justifyContent: "center",
+  padding: 0,
+  margin: 0,
+  fontSize: 20,
+});
+
 class App extends Component {
   render(){
     return (
@@ -48,12 +75,14 @@ class App extends Component {
             <img src={logo} className="App-logo" alt="logo" />
             <h1 className="App-title">Techcrunch NewsFeed</h1>
           </header>
+          <StyledContainer>
             <ErrorBoundary>
               <Route
                 path="/"
-                component={RoutedNewsFeed}
+                component={NewsFeed}
               />
             </ErrorBoundary>
+          </StyledContainer>
         </div>
       </Router>
     )
